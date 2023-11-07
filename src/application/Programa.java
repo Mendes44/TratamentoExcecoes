@@ -21,8 +21,10 @@ public class Programa {
 		System.out.print("DATA DE CHECK-OUT (dd/MM/yyyy): ");
 		Date checkOut = sdf.parse(sc.next());
 		
+		//PERMANECE O TRATAMENTO DE EXCEÇÃO AQUI AINDA POIS ESSE PARA COLOCAR NA CLASSE RESERVATION, DEVERIA 
+		//SER NO COLOCADO NO CONSTRUTOR E NO CONSTRUTOR NÃO POSSO COLOCAR PRA VOLTAR UM STRING.
 		if (!checkOut.after(checkIn)) {
-			System.out.println("ERRO NA RESERVA! - CHECK-OUT INFERIOR A CHECK-IN");
+			System.out.println("ERRO NA RESERVA: CHECK-OUT INFERIOR A CHECK-IN");
 		}
 		else {
 			Reservation reserva = new Reservation(quarto,checkIn,checkOut);
@@ -35,27 +37,17 @@ public class Programa {
 			System.out.print("DATA DE CHECK-OUT (dd/MM/yyyy): ");
 			checkOut = sdf.parse(sc.next());
 			
-			//Tratamento muito ruim de erro - Logica esta no programa principal.
-			Date now = new Date();
-			if (checkIn.before(now) || checkOut.before(now)) {
-				System.out.println("ERRO NA RESERVA!!! --> DATA DA RESERVA TEM QUE SER DATAS FUTURAS! ");
+			//Tratamento ruim de erro - Logica esta agora na classe reservation.
+			String error = reserva.updateDates(checkIn, checkOut);
+			
+			if (error != null) {
+				System.out.println("ERRO NA RESERVA: " + error);
 			}
-			else if (!checkOut.after(checkIn)) {
-				System.out.println("ERRO NA RESERVA! - CHECK-OUT INFERIOR A CHECK-IN");
-			}
-			else {
-				//Responsavel por chamar o metodo de atualização das datas.
-				reserva.updateDates(checkIn, checkOut);
+			else {				
 				System.out.println("RESERVA: " + reserva);
 			}
-			
 		}
-		
-		
-		
-		
-		
-		
+
 		sc.close();
 
 	}

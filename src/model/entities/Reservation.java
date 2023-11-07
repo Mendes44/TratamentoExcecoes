@@ -43,10 +43,20 @@ public class Reservation {
 		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 	}
 	
-	//Implementando a atualização de datas.
-	public void updateDates (Date checkIn, Date checkOut) {
+	//Implementando a atualização de datas. - agora com tratamento do erro na classe correta mas ainda sim um metodo ruim.
+	public String updateDates (Date checkIn, Date checkOut) {
+		
+		Date now = new Date();
+		if (checkIn.before(now) || checkOut.before(now)) {
+			return "DATA DA RESERVA TEM QUE SER DATAS FUTURAS! ";
+		}
+		if (!checkOut.after(checkIn)) {
+			return "CHECK-OUT INFERIOR A CHECK-IN";
+		}
+		
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
+		return null;
 	}
 	
 	//Implementando o toString
