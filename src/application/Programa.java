@@ -9,24 +9,24 @@ import model.entities.Reservation;
 
 public class Programa {
 
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		
-		System.out.print("Numero do Quarto: ");
-		int quarto = sc.nextInt();
-		System.out.print("DATA DE CHECK-IN (dd/MM/yyyy): ");
-		Date checkIn = sdf.parse(sc.next());
-		System.out.print("DATA DE CHECK-OUT (dd/MM/yyyy): ");
-		Date checkOut = sdf.parse(sc.next());
-		
-		//PERMANECE O TRATAMENTO DE EXCEÇÃO AQUI AINDA POIS ESSE PARA COLOCAR NA CLASSE RESERVATION, DEVERIA 
-		//SER NO COLOCADO NO CONSTRUTOR E NO CONSTRUTOR NÃO POSSO COLOCAR PRA VOLTAR UM STRING.
-		if (!checkOut.after(checkIn)) {
-			System.out.println("ERRO NA RESERVA: CHECK-OUT INFERIOR A CHECK-IN");
-		}
-		else {
+		/*
+		 * - Agora o tratamento BOM - onde vou tratar os erros dentro da classe correta e usando o try/catch. 
+		 * - Utilizarei tambem o tratamento padrão do java: IllegalArgumentException instanciando na classe reservation
+		 * - O remove o ParseException para fazer o tratamento correto do erro.
+		 */
+
+		try {
+			System.out.print("Numero do Quarto: ");
+			int quarto = sc.nextInt();
+			System.out.print("DATA DE CHECK-IN (dd/MM/yyyy): ");
+			Date checkIn = sdf.parse(sc.next());
+			System.out.print("DATA DE CHECK-OUT (dd/MM/yyyy): ");
+			Date checkOut = sdf.parse(sc.next());
+	
 			Reservation reserva = new Reservation(quarto,checkIn,checkOut);
 			System.out.println("RESERVA: " + reserva);
 			
@@ -36,20 +36,18 @@ public class Programa {
 			checkIn = sdf.parse(sc.next());
 			System.out.print("DATA DE CHECK-OUT (dd/MM/yyyy): ");
 			checkOut = sdf.parse(sc.next());
+					
+			reserva.updateDates(checkIn, checkOut);
 			
-			//Tratamento ruim de erro - Logica esta agora na classe reservation.
-			String error = reserva.updateDates(checkIn, checkOut);
-			
-			if (error != null) {
-				System.out.println("ERRO NA RESERVA: " + error);
-			}
-			else {				
-				System.out.println("RESERVA: " + reserva);
-			}
+			System.out.println("RESERVA: " + reserva);
+		}	
+		catch (ParseException error1) {
+			System.out.println("FORMATO DA DATA INVALIDO!!!");
+		}
+		catch(IllegalArgumentException erro2) {
+			System.out.println("ERRO NA RESERVA: " + erro2.getMessage());
 		}
 
 		sc.close();
-
 	}
-
 }
