@@ -6,18 +6,13 @@ import java.util.Date;
 import java.util.Scanner;
 
 import model.entities.Reservation;
+import model.exceptions.DomainException;
 
 public class Programa {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		
-		/*
-		 * - Agora o tratamento BOM - onde vou tratar os erros dentro da classe correta e usando o try/catch. 
-		 * - Utilizarei tambem o tratamento padrão do java: IllegalArgumentException instanciando na classe reservation
-		 * - O remove o ParseException para fazer o tratamento correto do erro.
-		 */
 
 		try {
 			System.out.print("Numero do Quarto: ");
@@ -44,10 +39,21 @@ public class Programa {
 		catch (ParseException error1) {
 			System.out.println("FORMATO DA DATA INVALIDO!!!");
 		}
-		catch(IllegalArgumentException erro2) {
+		catch(DomainException erro2) {
 			System.out.println("ERRO NA RESERVA: " + erro2.getMessage());
+		}
+		catch(RuntimeException erro3) {
+			System.out.println("******** ERRO INESPERADO!!! ********");
 		}
 
 		sc.close();
+		
+		/*
+		 * - AGORA TRATAMENTO DE EXCEÇÕES BOM E PERSONALIZADO.
+		 * - RUNTIME = O COPILADOR NÃO OBRIGA A TRATAR.
+		 * - PROGRAMAÇÃO DEFENSIVA - BOA PRATICA.
+		 * - UPCASTING NA RUNTIMEEXCEPTION.
+		 * - CODIGO LIMPO.
+		 */
 	}
 }

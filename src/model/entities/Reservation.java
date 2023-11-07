@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import model.exceptions.DomainException;
+
 public class Reservation {
 
 	private Integer roomNumber;
@@ -15,7 +17,12 @@ public class Reservation {
 	public Reservation() {
 		
 	}
-	public Reservation(Integer roomNumber, Date checkIn, Date checkOut) {
+	public Reservation(Integer roomNumber, Date checkIn, Date checkOut) throws DomainException {
+		
+		if (!checkOut.after(checkIn)) {
+			throw new DomainException ("CHECK-OUT INFERIOR A CHECK-IN");
+		}
+		
 		this.roomNumber = roomNumber;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -40,14 +47,14 @@ public class Reservation {
 	}
 	
 	//AGORA A CLASSE VOLTA SER VOID. E INSTACIO A FUNÇÃO THROW NEW ILLEGALARGUMENTSEXCEPTION.
-	public void updateDates (Date checkIn, Date checkOut) {
+	public void updateDates (Date checkIn, Date checkOut) throws DomainException {
 		
 		Date now = new Date();
 		if (checkIn.before(now) || checkOut.before(now)) {
-			throw new IllegalArgumentException("DATA DA RESERVA TEM QUE SER DATAS FUTURAS! ");
+			throw new DomainException("DATA DA RESERVA TEM QUE SER DATAS FUTURAS! ");
 		}
 		if (!checkOut.after(checkIn)) {
-			throw new IllegalArgumentException ("CHECK-OUT INFERIOR A CHECK-IN");
+			throw new DomainException ("CHECK-OUT INFERIOR A CHECK-IN");
 		}
 		
 		this.checkIn = checkIn;
